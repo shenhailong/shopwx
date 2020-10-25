@@ -1,7 +1,7 @@
 export default {
   pages: [
-    'pages/index/index',
     'pages/login/index',
+    'pages/index/index',
     'pages/orderDetail/index'
   ],
   window: {

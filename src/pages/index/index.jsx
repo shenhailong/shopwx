@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
 import Taro from '@tarojs/taro'
-import { View, Input, Picker } from '@tarojs/components'
+import { View, Picker, Text } from '@tarojs/components'
+import { AtSearchBar, AtButton } from 'taro-ui'
+import classNames from 'classnames'
+import "taro-ui/dist/style/components/search-bar.scss" // 按需引入
+import "taro-ui/dist/style/components/button.scss" // 按需引入
+import "taro-ui/dist/style/components/icon.scss" // 按需引入
 import fly from '@/configs/fly'
 import './index.scss'
 
@@ -13,7 +18,8 @@ export default class Index extends Component {
       curPage: 1, // 当前页
       pageSize: 12,
       pages: 0,
-      sstartdate: ''
+      sstartdate: '',
+      senddate: ''
     }
   }
 
@@ -48,11 +54,12 @@ export default class Index extends Component {
 
   // 获取客户清单
   async fetchList() {
-    const { curPage, pageSize, sstartdate, list, searchString } = this.state
+    const { curPage, pageSize, sstartdate, senddate, list, searchString } = this.state
     const params = {
       curPage,
       pageSize,
       sstartdate,
+      senddate,
       searchString: searchString.trim()
     }
     Taro.showLoading({
@@ -71,8 +78,8 @@ export default class Index extends Component {
     Taro.hideLoading()
   }
 
-  inputHandler(e) {
-    this.setState({ searchString : e.detail.value })
+  inputHandler(value) {
+    this.setState({ searchString : value })
   }
 
   // 跳转 到账查询
@@ -82,43 +89,99 @@ export default class Index extends Component {
     })
   }
 
-  onDateChange(e) {
-    console.log(e)
+  onStartDateChange(e) {
     this.setState({
       sstartdate: e.detail.value
     })
   }
 
+  onEndDateChange(e) {
+    this.setState({
+      senddate: e.detail.value
+    })
+  }
+
+  startDateClass() {
+    const className = classNames({
+      disabled: !this.state.sstartdate,
+      time: this.state.sstartdate
+    })
+    return className
+  }
+
+  endDateClass() {
+    const className = classNames({
+      disabled: !this.state.senddate,
+      time: this.state.senddate
+    })
+    return className
+  }
+
+  reset() {
+    this.setState({
+      sstartdate: '',
+      senddate: '',
+      searchString: ''
+    })
+  }
+
+  onActionClick() {
+    this.setState({
+      list: []
+    }, () => {
+      this.fetchList()
+    })
+  }
+
   render () {
-    const { list } = this.state
+    const { list, searchString, sstartdate, senddate } = this.state
     const listDom = list.map(item => {
       return (
-        <View onClick={this.navigateToRecord.bind(this, item)} key={item} className='item'>
-          111
+        <View onClick={this.navigateToRecord.bind(this, item)} key={item} className='list'>
+          <View className='item'>
+            <View className='label'>订单号码:</View>
+            <View className='value'>{item.orderno}</View>
+          </View>
+          <View className='item'>
+            <View className='label'>订单号码:</View>
+            <View className='value'>{item.orderno}</View>
+          </View>
+          <View className='item'>
+            <View className='label'>订单号码:</View>
+            <View className='value'>{item.orderno}</View>
+          </View>
+          <View className='item'>
+            <View className='label'>订单号码:</View>
+            <View className='value'>{item.orderno}</View>
+          </View>
+
         </View>
       )
     })
     return (
       <View className='wrap-index'>
-        <View className='d'>
-          <Input
-            value={this.state.searchString}
-            onInput={this.inputHandler.bind(this, 'username')}
-            className='input_dom'
-            placeholderClass='placeholder'
-            maxLength='30'
-            type='text' placeholder='请输入订单编号 / 产品编号'
-          />
-          <Picker mode='date' onChange={this.onDateChange.bind(this)}>
-            <View className='picker'>
-              当前选择：{this.state.sstartdate}
+        <View className='header'>
+        <AtSearchBar
+          value={searchString}
+          showActionButton
+          placeholder='请输入订单编号 / 产品编号'
+          onChange={this.inputHandler.bind(this)}
+          onActionClick={this.onActionClick.bind(this)}
+        />
+        <View className='time-wrap'>
+          <Picker className='picker' mode='date' onChange={this.onStartDateChange.bind(this)}>
+            <View>
+              开始日期：<Text className={this.startDateClass()}>{sstartdate ? sstartdate : '请选择'}</Text>
             </View>
           </Picker>
-          <Picker mode='date' onChange={this.onDateChange.bind(this)}>
-            <View className='picker'>
-              当前选择：{this.state.sstartdate}
+          <Picker className='picker' mode='date' onChange={this.onEndDateChange.bind(this)}>
+            <View>
+              结束日期：<Text className={this.endDateClass()}>{senddate ? senddate : '请选择'}</Text>
             </View>
           </Picker>
+          <AtButton onClick={this.reset.bind(this)} className='btn-reset' type='secondary' size='small'>重置</AtButton>
+        </View>
+
         </View>
         <View className='content'>
           {

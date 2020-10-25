@@ -1,30 +1,26 @@
 import React, { Component } from 'react'
-import { View, Text, Input, Button, Form } from '@tarojs/components'
+import Taro from '@tarojs/taro'
+import { View, Input, Button, Form, Image } from '@tarojs/components'
 import classNames from 'classnames'
 import fly from '@/configs/fly'
+import { TOKEN } from '@/constants/key'
+// import { BASE_URL } from '@/constants/common'
 import md5 from 'md5'
 import './index.scss'
 
+let BASE_URL  = 'http://39.100.227.252:888'
 export default class Index extends Component {
-
   constructor(props){
     super(props)
     this.state = {
-      password: '111111', // 密码
-      username: 'mayun', // 手机号
-      openEye: false // 密码可见不可见
+      password: '', // 密码
+      username: '', // 手机号
+      vcode: '', //
+      openEye: false, // 密码可见不可见
+      needCaptcha: false,
+      imgUrl: `${BASE_URL}/cnas/v1/vcode.picture.generate`,
     }
   }
-
-  componentWillMount () { }
-
-  componentDidMount () { }
-
-  componentWillUnmount () { }
-
-  componentDidShow () { }
-
-  componentDidHide () { }
 
   // 处理输入框事件，更新state
   inputHandler = (key, e) => {
@@ -32,10 +28,19 @@ export default class Index extends Component {
     this.props.onChildInputChange(key, e.detail.value)
   }
 
+  //  用户名输入框输入就重新获取验证码
+  inputBlur() {
+    if(this.state.username) {
+      this.setState({
+        needCaptcha: true
+      }, () => {
+        this.getImg()
+      })
+    }
+  }
+
   // 密码可见不可见
   changeEye() {
-    console.log(111)
-    console.log(this)
     this.setState({
       openEye: !this.state.openEye
     })
@@ -50,31 +55,49 @@ export default class Index extends Component {
   }
 
   async submitHandler() {
-    console.log(232322)
     let data = {
       username: this.state.username,
       passwd: md5(this.state.password),
-      vcode: 3050
-      // vcode: this.state.vcode
+      vcode: this.state.vcode
     }
     let res = await fly.post('user.login', data)
     console.log(res)
+    if(res.code === 0){
+      Taro.setStorage({
+        key: TOKEN,
+        data: res.data.token
+      })
+      Taro.reLaunch({
+        url: '/pages/index/index'
+      })
+    }
+  }
+
+  getImg() {
+    let { username, imgUrl } = this.state
+    this.setState({
+      codeUrl: `${imgUrl}?username=${username}&random=${Math.random()}`
+    })
   }
 
   render () {
+    let { codeUrl, needCaptcha } = this.state
     return (
       <View className='wrap_login'>
         <View className='content'>
+          <View className='title'>欢迎登录磐安云创</View>
+
           <View className='form'>
             <View className='form_item'>
-              <View className='label'>账号</View>
+              <View className='label'>用户名</View>
                 <Input
+                  onBlur={this.inputBlur.bind(this)}
                   value={this.state.username}
                   onInput={this.inputHandler.bind(this, 'username')}
                   className='input_dom'
                   placeholderClass='placeholder'
                   maxLength='30'
-                  type='text' placeholder='请输入手机号码/工号'
+                  type='text' placeholder='请输入用户名'
                 />
             </View>
 
@@ -102,17 +125,18 @@ export default class Index extends Component {
               </View>
             </View>
 
-            <View className='form_item'>
-              <View className='label'>账号</View>
+            { needCaptcha && <View className='form_item'>
+              <View className='label'>验证码</View>
                 <Input
-                  value={this.state.username}
-                  onInput={this.inputHandler.bind(this, 'username')}
+                  value={this.state.vcode}
+                  onInput={this.inputHandler.bind(this, 'vcode')}
                   className='input_dom'
                   placeholderClass='placeholder'
-                  maxLength='30'
-                  type='text' placeholder='请输入手机号码/工号'
+                  maxLength='4'
+                  type='text' placeholder='请输入验证码'
                 />
-            </View>
+                <Image src={codeUrl} onClick={this.getImg.bind(this)} className='img' />
+            </View> }
             <Form onSubmit={this.submitHandler.bind(this)}>
             <Button
               formType='submit'
@@ -123,7 +147,6 @@ export default class Index extends Component {
             </Form>
           </View>
         </View>
-        <Text className='title'>Hello world!</Text>
       </View>
     )
   }
