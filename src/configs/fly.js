@@ -51,6 +51,7 @@ fly.interceptors.request.use(request => {
 let mark = true
 fly.interceptors.response.use(
   response => {
+    console.log(response)
     if (response.data.code === ResponseError) {
       Taro.showToast({
         title: response.data.message,
@@ -63,6 +64,9 @@ fly.interceptors.response.use(
       if(mark){
         mark = false
         // clear()
+        Taro.removeStorage({
+          key: TOKEN
+        })
         Taro.reLaunch({
           url: '/pages/login/index'
         }).then(() => {

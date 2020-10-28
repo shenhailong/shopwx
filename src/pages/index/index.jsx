@@ -7,6 +7,9 @@ import "taro-ui/dist/style/components/search-bar.scss" // 按需引入
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import "taro-ui/dist/style/components/icon.scss" // 按需引入
 import fly from '@/configs/fly'
+import { TOKEN } from '@/constants/key'
+import { getDate } from '@/utils/tools'
+import Empty from '@/components/empty'
 import './index.scss'
 
 export default class Index extends Component {
@@ -23,9 +26,13 @@ export default class Index extends Component {
     }
   }
 
-  // 返回上个页面刷新 onShow
   componentDidShow(){
-    this.reloadList()
+    Taro.getStorage({
+      key: TOKEN,
+      success: () => {
+        // this.reloadList()
+      }
+    })
   }
 
   // 重新加载列表数据
@@ -143,18 +150,17 @@ export default class Index extends Component {
             <View className='value'>{item.orderno}</View>
           </View>
           <View className='item'>
-            <View className='label'>订单号码:</View>
-            <View className='value'>{item.orderno}</View>
+            <View className='label'>产品编号:</View>
+            <View className='value'>{item.prodno}</View>
           </View>
           <View className='item'>
-            <View className='label'>订单号码:</View>
-            <View className='value'>{item.orderno}</View>
+            <View className='label'>产品描述:</View>
+            <View className='value'>{item.proddesc}</View>
           </View>
           <View className='item'>
-            <View className='label'>订单号码:</View>
-            <View className='value'>{item.orderno}</View>
+            <View className='label'>订单时间:</View>
+            <View className='value'>{getDate(item.orderdt, true)}</View>
           </View>
-
         </View>
       )
     })
@@ -185,7 +191,7 @@ export default class Index extends Component {
         </View>
         <View className='content'>
           {
-            list.length ? listDom : null
+            list.length ? listDom : <Empty />
           }
         </View>
       </View>

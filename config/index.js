@@ -1,3 +1,11 @@
+/*
+ * @Description:
+ * @Version: 1.0.0
+ * @Author: Dragon
+ * @Date: 2020-10-26 09:28:38
+ * @LastEditors: Dragon
+ * @LastEditTime: 2020-10-28 14:52:36
+ */
 const path = require('path');
 
 const config = {
@@ -21,6 +29,7 @@ const config = {
     }
   },
   alias: {
+    '@/components': path.resolve(__dirname, '..', 'src/components'),
     '@/constants': path.resolve(__dirname, '..', 'src/constants'),
     '@/configs': path.resolve(__dirname, '..', 'src/configs'),
     '@/utils': path.resolve(__dirname, '..', 'src/utils'),

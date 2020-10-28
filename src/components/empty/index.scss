@@ -1,0 +1,13 @@
+.wrap-empty{
+  padding-top: 200px;
+  text-align: center;
+  .icon-empty{
+    margin: 0 auto;
+    height: 160px;
+    width: 160px;
+    background-image: url('../../static/images/empty.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    margin-bottom: 20px;
+  }
+}

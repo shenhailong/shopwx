@@ -13,9 +13,6 @@ export const ResponseSuccess = '1'
 // 返回失败
 export const ResponseError = '0'
 // 需要登录
-export const ResponseNeedLogin = '401'
-// 未绑定账号
-export const ResponseNoBind = '80001'
-// 手机号尚未开通账号
-export const ResponseNoOpen = '80002'
+export const ResponseNeedLogin = 9900
+
 
