@@ -143,10 +143,6 @@ export default class Index extends Component {
   }
 
   onActionClick() {
-    if(!this.state.token){
-      this.goLogin()
-      return
-    }
     let { sstartdate, senddate} = this.state
     if(sstartdate !== '' && senddate !== ''){
       let start = sstartdate.replace(/-/g, '/') // 替换字符，变成标准格式
