@@ -4,11 +4,10 @@ import { View, Input, Button, Form, Image } from '@tarojs/components'
 import classNames from 'classnames'
 import fly from '@/configs/fly'
 import { TOKEN } from '@/constants/key'
-// import { BASE_URL } from '@/constants/common'
+import { BASE_URL } from '@/constants/common'
 import md5 from 'md5'
 import './index.scss'
 
-let BASE_URL  = 'http://39.100.227.252:888'
 export default class Index extends Component {
   constructor(props){
     super(props)
@@ -25,7 +24,6 @@ export default class Index extends Component {
   // 处理输入框事件，更新state
   inputHandler = (key, e) => {
     this.setState({ [key]: e.detail.value })
-    this.props.onChildInputChange(key, e.detail.value)
   }
 
   //  用户名输入框输入就重新获取验证码
@@ -61,7 +59,6 @@ export default class Index extends Component {
       vcode: this.state.vcode
     }
     let res = await fly.post('user.login', data)
-    console.log(res)
     if(res.code === 0){
       Taro.setStorage({
         key: TOKEN,

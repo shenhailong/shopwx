@@ -21,16 +21,20 @@ export default class Index extends Component {
       curPage: 1, // 当前页
       pageSize: 12,
       pages: 0,
-      sstartdate: '',
-      senddate: ''
+      sstartdate: '', // 开始日期
+      senddate: '', // 结束日期
+      token: ''
     }
   }
 
   componentDidShow(){
     Taro.getStorage({
       key: TOKEN,
-      success: () => {
-        // this.reloadList()
+      success: (value) => {
+        this.setState({
+          token: value
+        })
+        this.reloadList()
       }
     })
   }
@@ -89,10 +93,16 @@ export default class Index extends Component {
     this.setState({ searchString : value })
   }
 
-  // 跳转 到账查询
-  navigateToRecord = item => {
+  // 跳转到订单详情
+  navigateToDetail = item => {
     Taro.navigateTo({
       url: `/pages/orderDetail/index?id=${item.id}`
+    })
+  }
+
+  goLogin = () => {
+    Taro.navigateTo({
+      url: `/pages/login/index`
     })
   }
 
@@ -133,6 +143,25 @@ export default class Index extends Component {
   }
 
   onActionClick() {
+    if(!this.state.token){
+      this.goLogin()
+      return
+    }
+    let { sstartdate, senddate} = this.state
+    if(sstartdate !== '' && senddate !== ''){
+      let start = sstartdate.replace(/-/g, '/') // 替换字符，变成标准格式
+      let end = senddate.replace(/-/g, '/') // 替换字符，变成标准格式
+      var s = new Date(Date.parse(start));
+      var e = new Date(Date.parse(end));
+      if(s > e){
+        Taro.showToast({
+          title: '开始时间必须小于结束时间',
+          icon: 'none'
+        })
+        return
+      }
+    }
+
     this.setState({
       list: []
     }, () => {
@@ -141,10 +170,10 @@ export default class Index extends Component {
   }
 
   render () {
-    const { list, searchString, sstartdate, senddate } = this.state
+    const { list, searchString, sstartdate, senddate, token } = this.state
     const listDom = list.map(item => {
       return (
-        <View onClick={this.navigateToRecord.bind(this, item)} key={item} className='list'>
+        <View onClick={this.navigateToDetail.bind(this, item)} key={item} className='list'>
           <View className='item'>
             <View className='label'>订单号码:</View>
             <View className='value'>{item.orderno}</View>
@@ -191,7 +220,7 @@ export default class Index extends Component {
         </View>
         <View className='content'>
           {
-            list.length ? listDom : <Empty />
+            list.length ? listDom : (token ? <Empty />: <AtButton onClick={this.goLogin} type='primary' size='small' className='btn-login'>请登录</AtButton>)
           }
         </View>
       </View>

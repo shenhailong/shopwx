@@ -47,19 +47,24 @@
       .item{
         display: flex;
         align-items: flex-start;
-        // justify-content: space-between;
         margin-bottom: 20px;
       }
 
       .label{
         color: #999999;
-        width: 150px
+        width: 150px;
+        font-size: 26px;
       }
 
       .value{
         color: #333333;
-        flex: 1
+        flex: 1;
+        font-size: 26px;
       }
     }
+  }
+  .btn-login{
+    width: 200px;
+    margin-top: 300px;
   }
 }

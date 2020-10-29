@@ -2,9 +2,8 @@ import Taro from '@tarojs/taro'
 import { ResponseError, ResponseNeedLogin } from '@/constants/response'
 // import { clear } from '@/utils/token'
 import { TOKEN } from '@/constants/key'
+import { BASE_URL } from '@/constants/common'
 
-const BASE_URL = 'http://121.89.171.172'
-console.log(BASE_URL)
 console.log(process.env)
 
 let Fly = null
@@ -51,7 +50,6 @@ fly.interceptors.request.use(request => {
 let mark = true
 fly.interceptors.response.use(
   response => {
-    console.log(response)
     if (response.data.code === ResponseError) {
       Taro.showToast({
         title: response.data.message,
