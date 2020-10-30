@@ -99,7 +99,7 @@ export default class Index extends Component {
           <View className='info_box'>
             <Image src={HeaderImg} className='header_img' />
             <View className='name'>
-              { userInfo.username ? userInfo.username : 'ff'}
+              { userInfo.username ? userInfo.username : ''}
             </View>
           </View>
           {userInfo.member && <View className='level'>会员级别: <Text className='text'>{userInfo.member.membername}</Text></View>}
