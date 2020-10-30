@@ -4,7 +4,7 @@
  * @Author: Dragon
  * @Date: 2020-10-26 09:28:38
  * @LastEditors: Dragon
- * @LastEditTime: 2020-10-28 14:52:36
+ * @LastEditTime: 2020-10-30 13:38:54
  */
 const path = require('path');
 
@@ -33,6 +33,7 @@ const config = {
     '@/constants': path.resolve(__dirname, '..', 'src/constants'),
     '@/configs': path.resolve(__dirname, '..', 'src/configs'),
     '@/utils': path.resolve(__dirname, '..', 'src/utils'),
+    '@/static': path.resolve(__dirname, '..', 'src/static'),
   },
   framework: 'react',
   mini: {

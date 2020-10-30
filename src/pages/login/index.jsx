@@ -65,7 +65,7 @@ export default class Index extends Component {
         data: res.data.token
       })
       Taro.reLaunch({
-        url: '/pages/index/index'
+        url: '/pages/orderList/index'
       })
     }
   }

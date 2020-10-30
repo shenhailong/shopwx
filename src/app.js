@@ -1,6 +1,15 @@
+/*
+ * @Description:
+ * @Version: 1.0.0
+ * @Author: Dragon
+ * @Date: 2020-10-26 09:28:38
+ * @LastEditors: Dragon
+ * @LastEditTime: 2020-10-30 14:40:06
+ */
 import { Component } from 'react'
 import sr from 'sr-sdk-wxapp'
-
+import "taro-ui/dist/style/components/button.scss" // 按需引入
+import "taro-ui/dist/style/components/modal.scss" // 按需引入
 import './app.scss'
 
 /**

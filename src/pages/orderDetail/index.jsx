@@ -6,7 +6,6 @@ import { getDate } from '@/utils/tools'
 import './index.scss'
 
 export default class Index extends Component {
-
   constructor(props){
     super(props)
     this.state = {

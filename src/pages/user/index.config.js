@@ -4,10 +4,10 @@
  * @Author: Dragon
  * @Date: 2020-10-26 09:28:38
  * @LastEditors: Dragon
- * @LastEditTime: 2020-10-30 13:15:47
+ * @LastEditTime: 2020-10-30 14:45:50
  */
 export default {
-  navigationBarTitleText: '登录',
+  navigationBarTitleText: '用户中心',
   navigationBarTextStyle: 'white',
   navigationBarBackgroundColor: '#567df0'
 }
